@@ -128,21 +128,39 @@ It is possible for a node to have just one child. Consider the tree shown here. 
 
 ### (2) Pruning the query tree:
 
-After 
+Once we have a queue of nodes Q ordered such that they get popped from the queue in order of increasing importance, we are ready to prune the nodes one by one. `pruneQueryTree` algorithm works as follows:
 
-pruneQueryTree(root, L)
+* Pseudocode (simplified):
 
+```
+pruneQueryTree(root, Q, L) {
 
-	currentSize = formatSql(root);
+    currentSize = formatSql(root, PRUNE_AWARE);
 	
-while(currentSize > L) {
-
-	
-
+    while(currentSize > L) {
+        int changeInSize = pruneOneNode(Q);
+        currentSize -= changeInSize;
+    }
 }
 
-	
+pruneOneNode() {
 
-Pruning a node means that we are replacing the text generate from the subtree rooted at that node by a marker [ variable PRUNED_MARKER in the code] 
+    Node nodeToPrune = Q.remove();
 
-Order of pruning
+    String rootedSubTreeSql = SqlFormatter.formatSql(nodeToPrune, PRUNE_AWARE);
+    String sqlAfterPruning = "...";
+    
+    // Set the flag
+    nodeToPrune.setPruned();    
+
+    return length(rootedSubTreeSql) - length(sqlAfterPruning);
+}
+
+```
+
+SqlFormatter has a formatSql method which uses an instance of Formatter class to process the tree and generate Sql. This PR extends Formatter class to create a new PruneAwareFormatter implementation. PruneAwareFormatter is very similar to Formatter, except when node.isPruned() == true, it returns "..." instead of traversing the subtree.
+
+pruneOneNode method does make a call to formatSql method, but with the PruneAwareFormatter implementation. After a node is pruned, the subtree will not be traversed in any future formatSql call. Therefore, the complexity of pruneQueryTree is NOT O(n^2). If the tree has n nodes, the complexity would be O(n).  
+
+
+The actual implementation is a little bit more complicated due to (1) the way SqlFormatter and ExpressionFormatter have been implemented and (2) how indentation is propagated in SqlFormatter. 
