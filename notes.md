@@ -47,8 +47,11 @@ When we "prune" a node in the tree, we set a boolean member variable `node->prun
 ![pruning example](https://github.com/phd1994/query-abbreviation-notes/blob/master/images/pruning.png "Pruning Example")
 
 Initial sql: `val_0 not in (‘val_1’, 'val_2', 'val_3', 'val_4')`
+
 After pruning 'val_1':  `val_0 not in ['...', ‘val_2', 'val_3', 'val_4']`
+
 After pruning 'val_3':  `val_0 not in ['...', ‘val_2', '...', 'val_4']`
+
 After pruning inExprList: `val_0 not in ...`
 
 ### (1) Generating a queue Q of nodes to be pruned:
