@@ -76,7 +76,11 @@ The order of pruning is decided based on the value of tuple <cpVal, level> for e
 	pVal(child_node) = pVal(parent_node) / parent.getChildren().size()
 	```
   
-    * An example for computing pVals has been shown in pVal.png. pVal can be computed recursively and stored by traversing the whole tree. Two important invariants here: (1) child’s pVal is always less than or equal to parent’s pval. (2) All the children of a node have same pVal.
+    * An example for computing pVals has been shown here. 
+
+![pVal example](https://github.com/phd1994/query-abbreviation-notes/blob/master/images/pVal.png "pVal computation")
+
+    * pVal can be computed recursively and stored by traversing the whole tree. Two important invariants here: (1) child’s pVal is always less than or equal to parent’s pval. (2) All the children of a node have same pVal.
     * cpVal of a node is equal to the pVal of its children (if at least one exists). Otherwise, cpVal of a node is equal to the pVal of that node. 
   
   	```
@@ -111,11 +115,13 @@ The nodes are added to a list during traversal for pruning using isAllowedToBePr
 
 #### Why are we using cpVal instead of pVal?
 
-Consider the tree shown in cpVal.png. Assume that all nodes are allowed to be pruned. Intuitively, the 100 nodes named D_{\d+} should be pruned first. After pruning them, we will have "..." a hundred times in the generated sql. At this point, among all the unpruned nodes, node B is the one contributing the most to the "bulkiness" of the tree, and hence the SQL. So intuitively, B should be pruned before we prune E or F. But, pVal(B) = 1/2, and pVal(E)=pVal(F)=1/4. So, the node E and node F will get pruned before B, if we compare pVal values. Instead, if we compare cpVal, B will be picked first for pruning since cpVal(B) = 1/100 < 1/4 = cpVal(E). 
+![cpVal example](https://github.com/phd1994/query-abbreviation-notes/blob/master/images/cpVal.png "Why cpVal?")
+
+Consider the tree shown here. Assume that all nodes are allowed to be pruned. Intuitively, the 100 nodes named D_{\d+} should be pruned first. After pruning them, we will have "..." a hundred times in the generated sql. At this point, among all the unpruned nodes, node B is the one contributing the most to the "bulkiness" of the tree, and hence the SQL. So intuitively, B should be pruned before we prune E or F. But, pVal(B) = 1/2, and pVal(E)=pVal(F)=1/4. So, the node E and node F will get pruned before B, if we compare pVal values. Instead, if we compare cpVal, B will be picked first for pruning since cpVal(B) = 1/100 < 1/4 = cpVal(E). 
 
 #### Why are we using level?
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![level example](https://github.com/phd1994/query-abbreviation-notes/blob/master/images/level.png "Why level?")
 
 It is possible for a node to have just one child. Consider level.png. In that case, we would like the child to get pruned before the node itself. Adding "level" to our comparator will take care of such cases.
 
