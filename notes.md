@@ -33,6 +33,7 @@ At a high level, the query abbreviation has been implemented as follows:
 
   + Returns the query string generated from the pruned tree. 
 
+======
 
 ## Algorithm for abbreviation:
 
@@ -164,11 +165,15 @@ pruneOneNode method does make a call to formatSql method, but with the PruneAwar
 
 The actual implementation is a little bit more complicated due to (1) the way SqlFormatter and ExpressionFormatter have been implemented and (2) how indentation is propagated in SqlFormatter. ( This PR also makes some refactoring changes to SqlFormatter and ExpressionFormatter classes for PruneAwareFormatter implementation. )
 
+======
+
 #### Role of `isAllowedToBePruned` method
 
 Some types of Nodes have been handled specially in SqlFormatter and ExpressionFormatter classes. For example, `With` and `WithQuery` nodes don't have a corresponding visit method. Nodes of type `Table` are treated differently when they are traversed through `visitQuery` method. A new `TableSubQuery` node is generated and processed within `visitQuery` method while traversing. The algorithm won't be able to prune such nodes, because formatSql calls will fail, when called on subtrees rooted at those nodes. isAllowedToBePruned method takes care of such cases. 
 
 Another possible use of  `isAllowedToBePruned` method is to explicitly exclude nodes that we don't want to prune. For example, abbreviation for "SELECT * FROM abcd WHERE presto = awesome", results in "... FROM abcd WHERE ..." , because of how `visitQuerySpecification` is implemented. If we blackList SELECT class, we can abbreviate the query to "SELECT ... FROM abcd WHERE ..." instead.
+
+======
 
 #### Testing
 
