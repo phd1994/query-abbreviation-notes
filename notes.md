@@ -162,5 +162,14 @@ SqlFormatter has a formatSql method which uses an instance of Formatter class to
 
 pruneOneNode method does make a call to formatSql method, but with the PruneAwareFormatter implementation. After a node is pruned, the subtree will not be traversed in any future formatSql call. Therefore, the complexity of pruneQueryTree is NOT O(n^2). If the tree has n nodes, the complexity would be O(n).  
 
+The actual implementation is a little bit more complicated due to (1) the way SqlFormatter and ExpressionFormatter have been implemented and (2) how indentation is propagated in SqlFormatter. ( This PR also makes some refactoring changes to SqlFormatter and ExpressionFormatter classes for PruneAwareFormatter implementation. )
 
-The actual implementation is a little bit more complicated due to (1) the way SqlFormatter and ExpressionFormatter have been implemented and (2) how indentation is propagated in SqlFormatter. 
+#### Role of `isAllowedToBePruned` method
+
+Some types of Nodes have been handled specially in SqlFormatter and ExpressionFormatter classes. For example, `With` and `WithQuery` nodes don't have a corresponding visit method. Nodes of type `Table` are treated differently when they are traversed through `visitQuery` method. A new `TableSubQuery` node is generated and processed within `visitQuery` method while traversing. The algorithm won't be able to prune such nodes, because formatSql calls will fail, when called on subtrees rooted at those nodes. isAllowedToBePruned method takes care of such cases. 
+
+Another possible use of  `isAllowedToBePruned` method is to explicitly exclude nodes that we don't want to prune. For example, abbreviation for "SELECT * FROM abcd WHERE presto = awesome", results in "... FROM abcd WHERE ..." , because of how `visitQuerySpecification` is implemented. If we blackList SELECT class, we can abbreviate the query to "SELECT ... FROM abcd WHERE ..." instead.
+
+#### Testing
+
+`TestQueryAbbreviator` class tests the logic for abbreviation against a bunch of queries. Most of the queries are borrowed from TestStatementBuilder class. 
