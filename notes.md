@@ -67,21 +67,22 @@ The order of pruning is decided based on the value of tuple <cpVal, level> for e
 
 2. Defintion of cpVal:
 
-    * Definition of cpVal is dependent on the definition of pVal.
-    * Definition of pVal:
+    + Definition of cpVal is dependent on the definition of pVal.
+    + Definition of pVal:
   	
 	```
 	pVal(root) = 1.0
-	
+
 	pVal(child_node) = pVal(parent_node) / parent.getChildren().size()
 	```
-  
-    * An example for computing pVals has been shown here. 
+    
+    + An example for computing pVals has been shown here. 
 
-![pVal example](https://github.com/phd1994/query-abbreviation-notes/blob/master/images/pVal.png "pVal computation")
+    + ![pVal example](https://github.com/phd1994/query-abbreviation-notes/blob/master/images/pVal.png "pVal computation")
 
-    * pVal can be computed recursively and stored by traversing the whole tree. Two important invariants here: (1) child’s pVal is always less than or equal to parent’s pval. (2) All the children of a node have same pVal.
-    * cpVal of a node is equal to the pVal of its children (if at least one exists). Otherwise, cpVal of a node is equal to the pVal of that node. 
+    + pVal can be computed recursively and stored by traversing the whole tree. Two important invariants here: (1) child’s pVal is always less than or equal to parent’s pval. (2) All the children of a node have same pVal.
+
+    + cpVal of a node is equal to the pVal of its children (if at least one exists). Otherwise, cpVal of a node is equal to the pVal of that node. 
   
   	```
 	if a node has children:
@@ -123,7 +124,7 @@ Consider the tree shown here. Assume that all nodes are allowed to be pruned. In
 
 ![level example](https://github.com/phd1994/query-abbreviation-notes/blob/master/images/level.png "Why level?")
 
-It is possible for a node to have just one child. Consider level.png. In that case, we would like the child to get pruned before the node itself. Adding "level" to our comparator will take care of such cases.
+It is possible for a node to have just one child. Consider the tree shown here. In such cases, we would like the child to get pruned before the node itself. Adding "level" to our comparator will take care of that.
 
 ### (2) Pruning the query tree:
 
