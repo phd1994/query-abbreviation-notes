@@ -173,7 +173,7 @@ Some types of Nodes have been handled specially in SqlFormatter and ExpressionFo
 
 Another possible use of  `isAllowedToBePruned` method is to explicitly exclude nodes that we don't want to prune. For example, abbreviation for "SELECT * FROM abcd WHERE presto = awesome", results in "... FROM abcd WHERE ..." , because of how `visitQuerySpecification` is implemented. If we blackList SELECT class, we can abbreviate the query to "SELECT ... FROM abcd WHERE ..." instead.
 
-======
+***
 
 #### Testing
 
