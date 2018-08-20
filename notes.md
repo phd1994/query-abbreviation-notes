@@ -165,7 +165,7 @@ pruneOneNode method does make a call to formatSql method, but with the PruneAwar
 
 The actual implementation is a little bit more complicated due to (1) the way SqlFormatter and ExpressionFormatter have been implemented and (2) how indentation is propagated in SqlFormatter. ( This PR also makes some refactoring changes to SqlFormatter and ExpressionFormatter classes for PruneAwareFormatter implementation. )
 
-======
+***
 
 #### Role of `isAllowedToBePruned` method
 
