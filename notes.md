@@ -115,6 +115,8 @@ Consider the tree shown in cpVal.png. Assume that all nodes are allowed to be pr
 
 #### Why are we using level?
 
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
 It is possible for a node to have just one child. Consider level.png. In that case, we would like the child to get pruned before the node itself. Adding "level" to our comparator will take care of such cases.
 
 ### (2) Pruning the query tree:
