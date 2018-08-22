@@ -10,11 +10,11 @@
 
 if we have a query
 
-	`Select * from table_name where col1_name not in [‘val_1’, ‘val_2’, ….. ‘Val_2000’] and col2_name <= val_0.`
+	`Select * from table_name where col1_name not in [‘val_1’, ‘val_2’, ….. ‘val_2000’] and col2_name <= val_0.`
 
 After shortening, it would be better to have 
 
-	`Select * from table_name where col1_name not in [...] and col2_name <= 5`
+	`Select * from table_name where col1_name not in [...] and col2_name <= val_0`
 
 Instead of
 
