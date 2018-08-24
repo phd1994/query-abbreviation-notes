@@ -18,7 +18,7 @@ Number of Nodes | Time taken by SQL_PARSER::createStatement() | Time taken by Qu
 
 (The long queries we have observed are between 10000 and 50000 nodes.) 
 
-## How long does it take to run testAbridgementLogic?
+## How long does it take to run TestQueryAbridger::testAbridgementLogic?
 
 testAbridgementLogic() method tests the invariants in abbreviation process on the queries added to `queries` list. 
 
