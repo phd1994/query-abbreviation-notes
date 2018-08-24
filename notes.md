@@ -4,7 +4,7 @@
 
 * Query-list.js makes a call to /v1/query/ endpoint, which returns a long list of queries. At times, when “query” field in QueryInfo object is too long (~1MB) for several queries, the REST call ends up fetching a lot of data from Presto Server. Instead of the whole query strings, sending a shorter version may allow us to reduce overall size of the response.
 
-* (1) Pagination of query responses OR (2) Truncation of query strings are simple approaches that first come to mind to resolve this. The code in this PR takes a third approach, something a bit more involved, generating a shorter “abridged” version (that has length <= a configurable parameter L) for a query string without losing its sense. This can still be combined with approach (1) if required. And in case we fail to produce an abridged version <= L, we fall back to approach (2), i.e. truncation.
+* (1) Pagination of query responses OR (2) Truncation of query strings - are simple approaches that first come to mind to resolve this. The code in this PR takes a third approach, something a bit more involved, generating a shorter “abridged” version (that has length <= a configurable parameter L) for a query string without losing its sense. This can still be combined with approach (1) if required. And in case we fail to produce an abridged version <= L, we fall back to approach (2), i.e. truncation.
 
 * Meaningful abbreviation of query strings seemed like an interesting problem in its own. For example, 
 
